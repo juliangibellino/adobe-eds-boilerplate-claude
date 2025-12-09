@@ -1,0 +1,22 @@
+{
+  "name": "behr-eds",
+  "version": "1.0.0",
+  "description": "Behr Paints marketing website on Adobe Edge Delivery Services",
+  "private": true,
+  "scripts": {
+    "lint:js": "eslint .",
+    "lint:css": "stylelint blocks/**/*.css styles/*.css",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:fix": "npm run lint:js -- --fix && npm run lint:css -- --fix",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.28.5",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "stylelint": "^16.26.1",
+    "stylelint-config-standard": "^37.0.0",
+    "vitest": "^1.6.0"
+  }
+}
