@@ -1,224 +1,136 @@
-# Claude Code Configuration for Adobe EDS
+# Claude Code Configuration for Behr EDS
 
-This directory contains Claude Code configuration files optimized for Adobe Edge Delivery Services (EDS) development.
+This directory contains Claude Code configuration and AI coding agent skills optimized for Adobe Edge Delivery Services development.
 
 ## Directory Structure
 
 ```
 .claude/
 ├── README.md                    # This file
-├── commands/                    # Slash commands
+├── settings.local.json          # Local Claude Code settings
+├── skills/                      # AI agent skills (Adobe pattern)
+│   ├── content-driven-development/  # Orchestrator - start here
+│   ├── building-blocks/         # Block creation patterns
+│   ├── block-inventory/         # Survey existing blocks
+│   ├── testing-blocks/          # Validation procedures
+│   ├── docs-search/             # AEM documentation search
+│   ├── code-review/             # Code quality review
+│   └── performance-audit/       # Performance analysis
+├── commands/                    # Slash commands (legacy)
 │   ├── review.md               # /review - Code review
 │   ├── block.md                # /block - Generate blocks
 │   ├── performance.md          # /performance - Performance audit
 │   └── anti-patterns.md        # /anti-patterns - Scan for issues
-└── docs/                       # Documentation
+└── docs/
     └── best-practices.md       # EDS best practices guide
 ```
 
-## Available Commands
+## Skills System (Recommended)
 
-### `/review` - Comprehensive Code Review
-Performs a thorough code review focused on:
-- Architecture & patterns compliance
-- Security vulnerabilities (XSS, CSP violations)
-- Performance optimization
-- CSS design token usage
-- Accessibility compliance
-- Code quality
+Skills follow Adobe's pattern for AI coding agents. They provide structured guidance for development tasks.
 
-**Usage:**
-```
-/review
+### Discovering Skills
+
+```bash
+# Run discovery script
+./.agents/discover-skills
+
+# Or list directly
+ls .claude/skills/
 ```
 
-**When to use:**
-- Before committing code
-- During pull request reviews
-- After completing a feature
-- When refactoring code
+### Available Skills
 
----
+| Skill | Type | Purpose |
+|-------|------|---------|
+| `content-driven-development` | **Orchestrator** | Start here for ALL development |
+| `building-blocks` | Functional | Create/modify blocks |
+| `block-inventory` | Research | Find existing patterns |
+| `testing-blocks` | Functional | Validate implementations |
+| `docs-search` | Research | Search AEM.live docs |
+| `code-review` | Functional | Review code quality |
+| `performance-audit` | Functional | Audit performance |
 
-### `/block` - Generate New Block Component
-Scaffolds a new Adobe EDS block component with best practices baked in.
+### Using Skills
 
-**Usage:**
+1. **Read the SKILL.md file** for the skill you need
+2. **Follow all instructions** in order
+3. **Use referenced skills** when indicated
+
+**Example - Creating a new block:**
 ```
-/block
-```
-
-Claude will ask clarifying questions:
-- Block name (kebab-case)
-- Block purpose
-- Stateless (presentational) or stateful (interactive)?
-- Required content/data
-- Interactions needed
-- Store integration needed?
-
-**Generates:**
-- `/blocks/[name]/[name].js` - Component logic
-- `/blocks/[name]/[name].css` - Scoped styles
-- Usage instructions
-
----
-
-### `/performance` - Performance Audit
-Analyzes the codebase for performance issues and optimization opportunities.
-
-**Usage:**
-```
-/performance
+content-driven-development (start)
+  → building-blocks (implementation)
+    → testing-blocks (validation)
 ```
 
-**Checks:**
-- Bundle size (<100KB eager load budget)
-- Loading strategy (eager/lazy/delayed)
-- Image optimization
-- CSS performance
-- JavaScript performance
-- Third-party scripts
-- Font loading
-- LCP optimization
-- CLS prevention
-- Debouncing/throttling
+### Key Principle: Content Driven Development
 
-**Output:**
-- Performance score
-- Critical issues with fixes
-- Optimization recommendations
-- Estimated impact
+> **NEVER start writing code without first creating test content.**
 
----
+This is Adobe's core principle for EDS development. The `content-driven-development` skill enforces this pattern.
 
-### `/anti-patterns` - Anti-Pattern Scanner
-Scans codebase for common Adobe EDS anti-patterns and code smells.
+## Slash Commands (Legacy)
 
-**Usage:**
-```
-/anti-patterns
-```
+These commands are still available but skills are preferred:
 
-**Detects:**
-- **Security:** XSS vulnerabilities, unescaped content
-- **Memory leaks:** Uncleaned event listeners, subscriptions
-- **State management:** Direct mutations, unnecessary re-renders
-- **HTML generation:** Raw strings instead of atoms
-- **CSS:** Magic numbers, missing focus states
-- **Performance:** Unoptimized images, missing debouncing
-- **Accessibility:** Missing ARIA labels, no keyboard support
-- **EDS-specific:** Wrong block structure, broken conventions
+| Command | Equivalent Skill |
+|---------|------------------|
+| `/review` | `code-review` skill |
+| `/block` | `building-blocks` skill |
+| `/performance` | `performance-audit` skill |
+| `/anti-patterns` | `code-review` skill |
 
-**Output:**
-- Categorized issues (Critical/High/Medium/Low)
-- Specific file paths and line numbers
-- Code examples and fixes
+## Quick Start
 
----
+### For New Development
 
-## Best Practices Documentation
+1. Start with the `content-driven-development` skill
+2. Create test content first
+3. Use `building-blocks` for implementation
+4. Use `testing-blocks` for validation
 
-### [best-practices.md](docs/best-practices.md)
+### For Code Review
 
-Comprehensive guide covering:
+1. Use the `code-review` skill
+2. Follow the checklist in the skill file
 
-#### Architecture Principles
-- Block-first design
-- Zero external dependencies
-- Lightweight & performance-focused
-- Progressive enhancement
+### For Performance Issues
 
-#### Block Development
-- Stateless vs stateful patterns
-- Component lifecycle
-- Block file structure
-- Naming conventions
+1. Use the `performance-audit` skill
+2. Run Lighthouse and bundle analysis
 
-#### JavaScript Patterns
-- Using framework atoms
-- Always escape user content
-- Event delegation
-- State management
-- Store subscriptions
+## Project Framework Reference
 
-#### CSS & Styling
-- Design token system
-- Available tokens (colors, spacing, typography, etc.)
-- BEM-like naming conventions
-- Responsive design (mobile-first)
-
-#### Performance Guidelines
-- Critical metrics (Lighthouse 100, LCP <1.5s, CLS <0.1)
-- Optimization checklist
-- Lazy loading strategies
-- Image optimization
-- Event delegation
-- Debouncing
-
-#### Security
-- XSS prevention with `esc()`
-- Using atoms (built-in escaping)
-- `richText()` for trusted content only
-- CSP compliance
-
-#### Accessibility
-- Semantic HTML
-- ARIA labels
-- Keyboard navigation with `onActivate()`
-- Focus management
-- Reduced motion support
-
-#### Common Anti-Patterns
-- Direct DOM manipulation
-- State mutations
-- Memory leaks
-- Mixed HTML patterns
-- CSS magic numbers
-
-#### Testing & Quality Checklist
-Pre-commit verification checklist
-
----
-
-## Quick Reference
-
-### Essential Framework Imports
+### Imports
 
 ```javascript
 import {
-  // Typography atoms
+  // Typography
   h1, h2, h3, text, lead, small,
-
-  // Interactive atoms
+  // Interactive
   button, link, buttonLink, input, select,
-
-  // Layout atoms
+  // Layout
   stack, cluster, container, card,
-
-  // Domain atoms
+  // Domain
   colorSwatch, icon,
-
-  // Component system
+  // Components
   defineComponent, createComponent,
-
-  // Utilities
-  esc, cx, attrs, uid, debounce,
-
-  // Events
-  on, onActivate
+  // Utils
+  esc, cx, attrs, uid, debounce
 } from '../../scripts/lib/index.js';
 
 // Stores
-import { colorCart } from '../../scripts/stores/color-cart.js';
+import colorCart from '../../scripts/stores/color-cart.js';
 ```
 
-### Design Token Categories
+### Design Tokens
 
 ```css
 /* Colors */
-var(--color-primary)
+var(--color-brand-primary)
 var(--color-text-primary)
-var(--color-surface-primary)
+var(--color-surface-raised)
 
 /* Spacing */
 var(--space-4)  /* 16px */
@@ -227,191 +139,52 @@ var(--space-sm) /* semantic */
 /* Typography */
 var(--font-size-lg)
 var(--font-weight-bold)
-var(--line-height-normal)
 
 /* Shapes */
 var(--radius-md)
 var(--shadow-md)
-
-/* Layout */
-var(--container-lg)
-var(--gutter)
 ```
 
 ### Component Lifecycle
 
 ```javascript
 defineComponent('my-block', {
-  defaultState: { /* initial state */ },
-
-  setup(c) {
-    // Runs once on creation
-    // Initialize data, parse content
-  },
-
-  mounted(c) {
-    // Runs after first render
-    // Bind events, subscribe to stores
-    c.on('click', '.btn', handler);
-    c.subscribe(store, handler);
-  },
-
-  render(c) {
-    // Returns HTML string
-    // Called on state changes
-    return `<div>${c.state.value}</div>`;
-  },
-
-  destroy(c) {
-    // Optional cleanup
-    // Auto-handles events and subscriptions
-  }
+  defaultState: { },
+  setup(c) { },      // Initialize
+  mounted(c) { },    // Bind events
+  render(c) { },     // Return HTML
+  destroy(c) { }     // Cleanup
 });
 ```
 
-### Performance Checklist
-
-- [ ] Eager bundle <100KB
-- [ ] Images optimized (`?width=X&format=webp`)
-- [ ] Images lazy-loaded (except LCP)
-- [ ] Design tokens used (no magic numbers)
-- [ ] Event delegation (no individual listeners)
-- [ ] Expensive ops debounced
-- [ ] State updates optimized
-- [ ] Lighthouse score >95
-
-### Security Checklist
-
-- [ ] All user content escaped with `esc()`
-- [ ] Atoms used for HTML generation
-- [ ] `richText()` only for EDS content
-- [ ] No inline event handlers
-- [ ] No `eval()` or `Function()`
-
-### Accessibility Checklist
-
-- [ ] Semantic HTML elements
-- [ ] ARIA labels on icon buttons
-- [ ] `onActivate()` for keyboard support
-- [ ] Focus states styled (`:focus-visible`)
-- [ ] Color contrast WCAG AA
-- [ ] Reduced motion support
-
----
-
-## Local Development
-
-### Start Local Server
-```bash
-aem up
-```
-→ http://localhost:3000
-
-### Linting
-```bash
-npm run lint
-```
-
-### Testing
-```bash
-npm test
-```
-
-### Performance Testing
-```bash
-# Install lighthouse
-npm install -g lighthouse
-
-# Run audit
-lighthouse http://localhost:3000 --output html --output-path ./lighthouse-report.html
-```
-
----
-
-## Workflow Recommendations
+## Development Workflow
 
 ### Before Coding
-1. Read [best-practices.md](docs/best-practices.md)
-2. Use `/block` to scaffold new components
-3. Review existing patterns in `/blocks/`
+1. Run `./.agents/discover-skills` to see available skills
+2. Start with `content-driven-development` skill
+3. Create test content before writing code
 
 ### During Development
 1. Use framework atoms (not raw HTML)
-2. Always escape user content with `esc()`
-3. Follow design token system
-4. Test keyboard navigation
-5. Check responsive behavior
+2. Escape all dynamic content with `esc()`
+3. Use design tokens (no magic numbers)
+4. Use event delegation (`c.on()`, `c.onActivate()`)
 
 ### Before Committing
-1. Run `/review` on changed files
-2. Run `/anti-patterns` to catch issues
-3. Run `/performance` if significant changes
-4. Run `npm run lint`
-5. Test in browser (http://localhost:3000)
-6. Check Lighthouse score
-7. Verify no console errors
-
-### During Code Review
-1. Use `/review` command for automated checks
-2. Verify performance impact
-3. Check accessibility compliance
-4. Ensure security best practices
-
----
-
-## Common Patterns
-
-### Stateless Block (Presentational)
-```javascript
-export default function decorate(block) {
-  const content = block.querySelector('p')?.textContent;
-
-  block.innerHTML = container(
-    h1(esc(content))
-  );
-}
-```
-
-### Stateful Component (Interactive)
-```javascript
-defineComponent('my-component', {
-  defaultState: { count: 0 },
-
-  mounted(c) {
-    c.on('click', '.btn', () => {
-      c.setState({ count: c.state.count + 1 });
-    });
-  },
-
-  render(c) {
-    return `<div>${c.state.count}</div>`;
-  }
-});
-
-export default function decorate(block) {
-  createComponent('my-component', block);
-}
-```
-
----
+1. Run `npm run lint`
+2. Use `testing-blocks` skill for validation
+3. Use `code-review` skill for quality check
+4. Test in browser at http://localhost:3000
 
 ## Resources
 
-- [Adobe EDS Documentation](https://www.aem.live/developer/tutorial)
-- [Project README](../README.md)
-- [Best Practices Guide](docs/best-practices.md)
+- [AGENTS.md](../AGENTS.md) - Full AI agent instructions
+- [AEM.live Documentation](https://www.aem.live/developer/tutorial)
+- [Block Collection](https://www.aem.live/developer/block-collection)
+- [Best Practices](docs/best-practices.md)
 
 ---
 
-## Support
-
-For questions or issues with Claude Code configuration:
-1. Check [best-practices.md](docs/best-practices.md)
-2. Review existing blocks in `/blocks/`
-3. Use slash commands for guidance (`/review`, `/block`, etc.)
-
----
-
-**Generated for:** Behr EDS Project
-**Claude Code Version:** Latest
+**Project:** Behr EDS
+**Skills Pattern:** Adobe AI Coding Agents
 **Last Updated:** 2025-12-09

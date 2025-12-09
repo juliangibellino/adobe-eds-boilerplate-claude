@@ -6,7 +6,9 @@
       "Bash(npm install)",
       "Bash(npm run lint:*)",
       "Bash(npm run lint:fix:*)",
-      "Bash(npm run lint:css:*)"
+      "Bash(npm run lint:css:*)",
+      "WebFetch(domain:www.aem.live)",
+      "WebSearch"
     ]
   }
 }

@@ -1,0 +1,53 @@
+#!/bin/bash
+# Discover available AI coding agent skills
+# Usage: ./.agents/discover-skills
+
+SKILLS_DIR=".claude/skills"
+
+echo "=========================================="
+echo "  Available AI Coding Agent Skills"
+echo "=========================================="
+echo ""
+
+if [ ! -d "$SKILLS_DIR" ]; then
+    echo "Error: Skills directory not found at $SKILLS_DIR"
+    exit 1
+fi
+
+# List skills with descriptions
+for skill_dir in "$SKILLS_DIR"/*/; do
+    if [ -d "$skill_dir" ]; then
+        skill_name=$(basename "$skill_dir")
+        skill_file="$skill_dir/SKILL.md"
+
+        if [ -f "$skill_file" ]; then
+            # Extract first non-empty line after "## Overview"
+            description=$(awk '/^## Overview/{found=1; next} found && /^[^#]/ && NF{print; exit}' "$skill_file" 2>/dev/null)
+            if [ -z "$description" ]; then
+                description="(See SKILL.md)"
+            fi
+            # Truncate long descriptions
+            description=$(echo "$description" | cut -c1-50)
+
+            printf "  %-28s %s\n" "$skill_name" "$description"
+        fi
+    fi
+done
+
+echo ""
+echo "=========================================="
+echo "  Usage Instructions"
+echo "=========================================="
+echo ""
+echo "1. Read the skill file before using:"
+echo "   cat .claude/skills/{skill-name}/SKILL.md"
+echo ""
+echo "2. For development tasks, ALWAYS start with:"
+echo "   content-driven-development"
+echo ""
+echo "3. Skill orchestration:"
+echo "   content-driven-development"
+echo "     └── building-blocks"
+echo "           └── testing-blocks"
+echo ""
+echo "See AGENTS.md for full documentation."
